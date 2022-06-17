@@ -1,7 +1,20 @@
+using ApplicationCore.Contracts.Services;
+using Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+using MovieShopMVC.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IMovieService, MovieService>();
+// Inject the connection string into DbContext options constructions
+// get the connection string from app string
+builder.Services.AddDbContext<MovieShopDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MovieShopDbConnection"));
+});
 
 var app = builder.Build();
 
